@@ -159,6 +159,8 @@ judge_func "install_php"
 chkconfig php-fpm on
 
 #config php.ini
+cd $script_dir
+/bin/cp -r php.ini /etc/php.ini
 }
 
 install_redis_ext() {

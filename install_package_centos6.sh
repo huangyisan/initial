@@ -102,15 +102,13 @@ make 1>&2 >> $install_log_dir/nginx/nginx_install.log && make install 1>&2 >> $i
 judge_func "install_nginx"
 
 /bin/bash -c "envsubst '\$app_base_dir' < ${script_dir}/nginx_manage.template > ${initd_dir}/nginx"
+chmod +x ${initd_dir}/nginx
 chkconfig nginx on
 
 chown nginx $app_base_dir/nginx
 
 echo "export PATH=\$PATH:$app_base_dir/nginx/sbin" >> /etc/profile.d/nginx.sh
 source /etc/profile
-
-
-/bin/cp -a $app_base_dir/nginx/conf $app_base_dir/nginx/conf.bak
 
 }
 
@@ -156,6 +154,7 @@ judge_func "install_php"
 
 
 /bin/bash -c "envsubst '\$app_base_dir' < ${script_dir}/php-fpm_manage.template > ${initd_dir}/php-fpm"
+chmod +x ${initd_dir}/php-fpm
 chkconfig php-fpm on
 
 #config php.ini

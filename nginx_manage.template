@@ -18,10 +18,10 @@
 # Check that networking is up.
 [ "$NETWORKING" = "no" ] && exit 0
 
-nginx="/usr/local/data/nginx/sbin/nginx"
+nginx="${app_base_dir}/nginx/sbin/nginx"
 prog=$(basename $nginx)
 
-NGINX_CONF_FILE="/usr/local/data/nginx/conf/nginx.conf"
+NGINX_CONF_FILE="${app_base_dir}/nginx/conf/nginx.conf"
 
 lockfile=/var/lock/subsys/nginx
 

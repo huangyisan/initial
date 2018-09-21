@@ -26,13 +26,14 @@ fi
 echo 'check ldconfig'
 ldconfig
 
-sleep 5
+sleep 1
 
 #########ENV##########
-download_base_dir=/ops/package/app
-app_base_dir=/app/local
-log_base_dir=/app/log
-install_log_dir=/tmp/install_log
+export download_base_dir=/ops/package/app
+export app_base_dir=/app/local
+export log_base_dir=/app/log
+export install_log_dir=/tmp/install_log
+export initd_dir=/app/init.d
 
 mkdir -p $download_base_dir
 mkdir -p $app_base_dir
@@ -238,6 +239,12 @@ if [ `php -m | grep Warning | wc -l` != 0 ];then
     sleep 5
 fi
 
+manager() {
+/bin/bash -c "envsubst '\$app_base_dir' < nginx_manage.template > ${initd_dir}/nginx"
+/bin/bash -c "envsubst '\$app_base_dir' < php-fpm_manage.template > ${initd_dir}/php-fpm"
+chmod +x ${initd_dir}/nginx
+chmod +x ${initd_dir}/php-fpm
+}
 
 # php-fpm start enable
 #systemctl enable php-fpm
@@ -247,7 +254,7 @@ fi
 
 
 main() {
-download_packages
+#download_packages
 #yum_install
 #install_nginx
 #install_php
@@ -255,7 +262,8 @@ download_packages
 #install_swoole_ext
 #install_memcached_ext
 #install_scws_ext
-install_imagic_ext
+#install_imagic_ext
+manager
 }
 
 main

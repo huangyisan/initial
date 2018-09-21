@@ -198,9 +198,9 @@ fi
 
 
 
-#install_php
-#install_redis_ext
-#install_swoole_ext
-#install_memcached_ext
+install_php
+install_redis_ext
+install_swoole_ext
+install_memcached_ext
 install_scws_ext
-#install_imagic_ext
+install_imagic_ext

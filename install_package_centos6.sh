@@ -12,7 +12,7 @@ if [[ "$(whoami)" != "root" ]]; then
     echo "please run this script as root !" >&2
     exit 1
 fi
-echo -e "\033[31m the script only Support CentOS_7 x86_64 \033[0m"
+echo -e "\033[31m the script only Support CentOS_6 x86_64 \033[0m"
 
 
 # 检查是否为64位系统，这个脚本只支持64位脚本
@@ -25,6 +25,8 @@ fi
 #########check ldconfig########
 echo 'check ldconfig'
 ldconfig
+
+sleep 5
 
 #########ENV##########
 download_base_dir=/ops/package/app
@@ -39,6 +41,7 @@ mkdir -p $install_log_dir
 
 download_packages() {
 ############download packages#############
+cd $download_base_dir
 wget https://nginx.org/download/nginx-1.12.1.tar.gz
 
 wget https://pecl.php.net/get/redis-4.1.0.tgz
@@ -70,7 +73,6 @@ yum -y install unzip libacl-devel openssl-devel libxml2-devel bzip2-devel curl-d
 judge_func() {
 if [ $? != 0 ];then
     echo -e "\033[1;31mexec $1 error......\033[0m"
-    echo -e "\033[1;31mSee install log in $install_log_dir/nginx/nginx_install.log\033[0m"
     exit 1
 else
     echo -e "\033[1;32m exec $1 success......\033[0m"
@@ -246,13 +248,13 @@ fi
 
 main() {
 download_packages
-yum_install
-install_nginx
-install_php
-install_redis_ext
-install_swoole_ext
-install_memcached_ext
-install_scws_ext
+#yum_install
+#install_nginx
+#install_php
+#install_redis_ext
+#install_swoole_ext
+#install_memcached_ext
+#install_scws_ext
 install_imagic_ext
 }
 

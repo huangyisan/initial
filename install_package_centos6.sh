@@ -103,8 +103,11 @@ mkdir -p $app_base_dir/nginx/
 
 make 1>&2 >> $install_log_dir/nginx/nginx_install.log && make install 1>&2 >> $install_log_dir/nginx/nginx_install.log
 
-
 judge_func "install_nginx"
+
+/bin/bash -c "envsubst '\$app_base_dir' < nginx_manage.template > ${initd_dir}/nginx"
+chkconfig nginx on
+
 
 chown nginx $app_base_dir/nginx
 
@@ -156,6 +159,10 @@ cp /etc/php-fpm.d/www.conf.default /etc/php-fpm.d/www.conf
 touch /etc/php-fpm.d/php-fpm
 
 judge_func "install_php"
+
+/bin/bash -c "envsubst '\$app_base_dir' < php-fpm_manage.template > ${initd_dir}/php-fpm"
+chkconfig php-fpm on
+
 }
 
 install_redis_ext() {
@@ -254,15 +261,15 @@ chmod +x ${initd_dir}/php-fpm
 
 
 main() {
-#download_packages
-#yum_install
-#install_nginx
-#install_php
-#install_redis_ext
-#install_swoole_ext
-#install_memcached_ext
-#install_scws_ext
-#install_imagic_ext
+download_packages
+yum_install
+install_nginx
+install_php
+install_redis_ext
+install_swoole_ext
+install_memcached_ext
+install_scws_ext
+install_imagic_ext
 manager
 }
 

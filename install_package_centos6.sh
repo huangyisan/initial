@@ -50,7 +50,7 @@ wget https://pecl.php.net/get/imagick-3.4.3.tgz
 wget https://pecl.php.net/get/memcached-3.0.0.tgz
 wget http://www.xunsearch.com/scws/down/scws-1.2.3.tar.bz2
 
-# tar
+# tar 
 tar zxf nginx-1.12.1.tar.gz
 
 tar zxf php-7.1.12.tar.gz
@@ -70,7 +70,6 @@ yum -y install unzip libacl-devel openssl-devel libxml2-devel bzip2-devel curl-d
 }
 
 #########judge func###########
-
 judge_func() {
 if [ $? != 0 ];then
     echo -e "\033[1;31mexec $1 error......\033[0m"
@@ -79,8 +78,6 @@ else
     echo -e "\033[1;32m exec $1 success......\033[0m"
 fi
 }
-
-
 
 ########install nginx########
 install_nginx() {
@@ -97,9 +94,7 @@ cd $download_base_dir/nginx-1.12.1
 mkdir -p $log_base_dir/nginx/
 mkdir -p $app_base_dir/nginx/
 
-
 ./configure --prefix=$app_base_dir/nginx --with-debug  --error-log-path=$log_base_dir/nginx/error.log --http-log-path=$log_base_dir/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --user=nginx --group=nginx --with-file-aio  --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-mail=dynamic --with-mail_ssl_module --with-pcre --with-pcre-jit --with-stream --with-stream_ssl_module --with-google_perftools_module --with-http_gunzip_module |tee $install_log_dir/nginx/nginx_install.log
-
 
 make 1>&2 >> $install_log_dir/nginx/nginx_install.log && make install 1>&2 >> $install_log_dir/nginx/nginx_install.log
 
@@ -108,10 +103,8 @@ judge_func "install_nginx"
 /bin/bash -c "envsubst '\$app_base_dir' < nginx_manage.template > ${initd_dir}/nginx"
 chkconfig nginx on
 
-
 chown nginx $app_base_dir/nginx
 
-# PAHT nginx
 echo "export PATH=\$PATH:$app_base_dir/nginx/sbin" >> /etc/profile.d/nginx.sh
 source /etc/profile
 
@@ -122,7 +115,7 @@ source /etc/profile
 
 #########install php##########
 
-install_php(){
+install_php() {
 echo -e "\033[1;32mStart install php......\033[0m"
 sleep 3
 mkdir -p $install_log_dir/php
@@ -246,12 +239,6 @@ if [ `php -m | grep Warning | wc -l` != 0 ];then
     sleep 5
 fi
 
-manager() {
-/bin/bash -c "envsubst '\$app_base_dir' < nginx_manage.template > ${initd_dir}/nginx"
-/bin/bash -c "envsubst '\$app_base_dir' < php-fpm_manage.template > ${initd_dir}/php-fpm"
-chmod +x ${initd_dir}/nginx
-chmod +x ${initd_dir}/php-fpm
-}
 
 # php-fpm start enable
 #systemctl enable php-fpm
@@ -270,7 +257,6 @@ install_swoole_ext
 install_memcached_ext
 install_scws_ext
 install_imagic_ext
-manager
 }
 
 main

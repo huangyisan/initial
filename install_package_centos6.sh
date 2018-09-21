@@ -163,6 +163,8 @@ chkconfig php-fpm on
 
 install_redis_ext() {
 # install redis-4.1.0
+echo -e "\033[1;32mStart install redis_ext......\033[0m"
+sleep 3
 cd $download_base_dir/redis-4.1.0
 /app/local/php/bin/phpize
 make clean &>/dev/null
@@ -174,6 +176,8 @@ judge_func "install_redis_ext"
 
 install_swoole_ext() {
 # install swoole-src-4.1.0
+echo -e "\033[1;32mStart install swoole_ext......\033[0m"
+sleep 3
 cd $download_base_dir/swoole-src-4.0.0
 /app/local/php/bin/phpize
 make clean &>/dev/null
@@ -184,7 +188,9 @@ judge_func "install_swoole_ext"
 }
 
 install_memcached_ext() {
-# install memcached-3.0.4  php
+# install memcached-3.0.4
+echo -e "\033[1;32mStart install memcached_ext......\033[0m"
+sleep 3
 cd $download_base_dir/libmemcached-1.0.16
 mkdir $app_base_dir/libmemcached
 ./configure --prefix=$app_base_dir/libmemcached
@@ -200,7 +206,9 @@ judge_func "install_memcached_ext"
 }
 
 install_imagic_ext() {
-# install imagick
+# install imagick-3.4.3
+echo -e "\033[1;32mStart install imagic_ext......\033[0m"
+sleep 3
 cd $download_base_dir/ImageMagick-7.0.7-25/ImageMagick/
 mkdir $app_base_dir/ImageMagick
 chmod +x ./configure
@@ -216,7 +224,9 @@ judge_func "install_imagic_ext"
 }
 
 install_scws_ext() {
-# install scws
+# install scws-1.2.3
+echo -e "\033[1;32mStart install scws_ext......\033[0m"
+sleep 3
 cd $download_base_dir/scws-1.2.3
 mkdir $app_base_dir/scws/
 ./configure --prefix=$app_base_dir/scws

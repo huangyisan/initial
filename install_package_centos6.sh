@@ -30,6 +30,7 @@ sleep 1
 
 #########ENV##########
 export download_base_dir=/ops/package/app
+export script_dir=/ops/initial
 export app_base_dir=/app/local
 export log_base_dir=/app/log
 export install_log_dir=/tmp/install_log
@@ -100,7 +101,7 @@ make 1>&2 >> $install_log_dir/nginx/nginx_install.log && make install 1>&2 >> $i
 
 judge_func "install_nginx"
 
-/bin/bash -c "envsubst '\$app_base_dir' < nginx_manage.template > ${initd_dir}/nginx"
+/bin/bash -c "envsubst '\$app_base_dir' < ${script_dir}/nginx_manage.template > ${initd_dir}/nginx"
 chkconfig nginx on
 
 chown nginx $app_base_dir/nginx
@@ -153,9 +154,11 @@ touch /etc/php-fpm.d/php-fpm
 
 judge_func "install_php"
 
-/bin/bash -c "envsubst '\$app_base_dir' < php-fpm_manage.template > ${initd_dir}/php-fpm"
+
+/bin/bash -c "envsubst '\$app_base_dir' < ${script_dir}/php-fpm_manage.template > ${initd_dir}/php-fpm"
 chkconfig php-fpm on
 
+#config php.ini
 }
 
 install_redis_ext() {
@@ -238,14 +241,6 @@ if [ `php -m | grep Warning | wc -l` != 0 ];then
 
     sleep 5
 fi
-
-
-# php-fpm start enable
-#systemctl enable php-fpm
-#echo start php-fpm
-#sleep 1
-#systemctl start php-fpm
-
 
 main() {
 download_packages

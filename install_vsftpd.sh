@@ -3,32 +3,12 @@
 # base db4, virtual user
 
 # install db4 vsftpd
+install_db4_vsftpd() {
 yum -y install db4-utils db4 vsftpd -y
-
-# create virtual user db file and record virtual username password
-touch /home/virtual_users.txt
-chmod 600 /home/virtual_users.txt
-cat << EOF >> /home/virtual_users.txt
-dusername
-password
-EOF
-
-# create db4 file
-db_load -T -t hash -f /home/virtual_users.txt /etc/vsftpd/virtual_users.db
-
-# create pam file
-touch /etc/pam.d/vsftpd_virtual
-cat << EOF > /etc/pam.d/vsftpd_virtual
-#%PAM-1.0
-auth    required        pam_userdb.so   db=/etc/vsftpd/virtual_users
-account required        pam_userdb.so   db=/etc/vsftpd/virtual_users
-session required        pam_loginuid.so
-EOF
 
 # backup config
 /bin/cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf_bak
 
- 
 cat << EOF > /etc/vsftpd/vsftpd.conf
 anonymous_enable=NO
 guest_enable=YES
@@ -50,8 +30,35 @@ tcp_wrappers=YES
 hide_ids=YES
 EOF
 
-# create home dir for virtual user
-install -g ftp -o ftp -d /ftp/virtual/huangyisan
+}
 
+# create virtual user db file and record virtual username password
+create_virtual_user() {
+touch /home/virtual_users.txt
+chmod 600 /home/virtual_users.txt
+cat << EOF >> /home/virtual_users.txt
+default
+default
+EOF
+
+# create db4 file
+db_load -T -t hash -f /home/virtual_users.txt /etc/vsftpd/virtual_users.db
+
+# create pam file
+touch /etc/pam.d/vsftpd_virtual
+cat << EOF > /etc/pam.d/vsftpd_virtual
+#%PAM-1.0
+auth    required        pam_userdb.so   db=/etc/vsftpd/virtual_users
+account required        pam_userdb.so   db=/etc/vsftpd/virtual_users
+session required        pam_loginuid.so
+EOF
+
+# create home dir for virtual user
+install -g ftp -o ftp -d /ftp/virtual/default
+}
+
+start_vsftpd() {
 # start vsftpd
-service vsftpd restart
+service vsftpd start
+}
+

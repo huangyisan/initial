@@ -38,6 +38,12 @@ EOF
 
 # create virtual user db file and record virtual username password
 add_virtual_user() {
+
+exist=`awk 'NR%2==1' /home/virtual_users.txt  | egrep "\<$username\>" | wc -l`
+
+if [ $exist !=0 ]; then
+    echo "the user $username is exists"
+else
 cat << EOF >> ${userlist_path}${userlist_file}
 $username
 $password

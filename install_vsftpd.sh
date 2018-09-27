@@ -9,7 +9,7 @@ yum -y install db4-utils db4 vsftpd -y
 touch /home/virtual_users.txt
 chmod 600 /home/virtual_users.txt
 cat << EOF >> /home/virtual_users.txt
-username
+dusername
 password
 EOF
 
@@ -43,16 +43,15 @@ xferlog_std_format=YES
 chroot_local_user=YES
 listen=YES
 pam_service_name=vsftpd_virtual
-user_sub_token=$USER
-local_root=/ftp/virtual/$USER
+user_sub_token=\$USER
+local_root=/ftp/virtual/\$USER
 userlist_enable=YES
 tcp_wrappers=YES
 hide_ids=YES
 EOF
 
 # create home dir for virtual user
-mkdir -p /ftp/virtual/username
-chown -R ftp:ftp /ftp/virtual/username/
+install -g ftp -o ftp -d /ftp/virtual/huangyisan
 
 # start vsftpd
 service vsftpd restart

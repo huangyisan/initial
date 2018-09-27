@@ -63,5 +63,11 @@ service vsftpd start
 }
 
 install_vsftpd() {
+install_db4_vsftpd
+create_virtual_user
+start_vsftpd
+}
 
+create_new_user() {
+create_virtual_user
 }

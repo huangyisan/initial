@@ -41,6 +41,7 @@ add_virtual_user() {
 
 exist=`awk 'NR%2==1' ${userlist_path}${userlist_file}  | egrep "\<$username\>" | wc -l`
 
+# judge user
 if [ "$exist" != 0 ]; then
     echo "The user $username is exists"
 else

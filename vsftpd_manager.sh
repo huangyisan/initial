@@ -86,32 +86,32 @@ then
     do
       case $arg in
         i|I)
-          # install vsftpd;;
-          flag=ture
-          echo "i" ;;
+            # install vsftpd;;
+            flag=ture
+            echo "i" ;;
         u)
-          username="$OPTARG"
-          ;;
+            username="$OPTARG"
+            ;;
         p)
-          password="$OPTARG"
-          ;;
+            password="$OPTARG"
+            ;;
         \?|h)
-          echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
-          exit 1
+            echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
+            exit 1
       esac
     done
-       if [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
-          install_vsftpd
+        if [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
+            install_vsftpd
 
-       elif [ -z "$flag" ] && [ -n "$username" ] && [ -n "$password" ]; then
-          add_virtual_user $username $password
-          db_load -T -t hash -f ${userlist_path}${userlist_file} /etc/vsftpd/virtual_users.db
-          install -g ftp -o ftp -d /ftp/virtual/$username
-       else
-          echo "empty"
-          exit 1
-       fi
+        elif [ -z "$flag" ] && [ -n "$username" ] && [ -n "$password" ]; then
+            add_virtual_user $username $password
+            db_load -T -t hash -f ${userlist_path}${userlist_file} /etc/vsftpd/virtual_users.db
+            install -g ftp -o ftp -d /ftp/virtual/$username
+        else
+            echo "username or password is empty"
+            exit 1
+        fi
 	   
 else
-  echo "input args"
+    echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
 fi

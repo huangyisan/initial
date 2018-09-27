@@ -3,9 +3,9 @@
 # base db4, virtual user
 set -x 
 
-export userlist_path="/home/"
-
-
+export userlist_path="${/home/}"
+export userlist_file="${virtual_users.txt}"
+exprot virtual_user_path="${/etc/vsftpd/}"
 
 # install db4 vsftpd
 install_db4_vsftpd() {
@@ -34,27 +34,26 @@ userlist_enable=YES
 tcp_wrappers=YES
 hide_ids=YES
 EOF
-
 }
 
 # create virtual user db file and record virtual username password
 add_virtual_user() {
-cat << EOF >> /home/virtual_users.txt
+cat << EOF >> ${userlist_path}${userlist_file}
 $username
 $password
 EOF
 }
 
 create_virtual_user() {
-touch /home/virtual_users.txt
-chmod 600 /home/virtual_users.txt
-cat << EOF >> /home/virtual_users.txt
+touch ${userlist_path}${userlist_file}
+chmod 600 ${userlist_path}${userlist_file}
+cat << EOF >> ${userlist_path}${userlist_file}
 default
 default
 EOF
 
 # create db4 file
-db_load -T -t hash -f /home/virtual_users.txt /etc/vsftpd/virtual_users.db
+db_load -T -t hash -f ${userlist_path}${userlist_file} /etc/vsftpd/virtual_users.db
 
 # create pam file
 touch /etc/pam.d/vsftpd_virtual
@@ -92,32 +91,33 @@ if [ x$1 != x ]
 then
     while getopts "ip:u:" arg
     do
-      case $arg in  
-        i)  
+      case $arg in
+        i)
           # install vsftpd;;
           flag=ture
           echo "i" ;;
-        u)  
+        u)
           username="$OPTARG"
           ;;
-        p)  
+        p)
           password="$OPTARG"
           ;;
-        \?) 
+        \?)
           echo "inviled args"
       esac
     done
        if [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
           install_vsftpd
-   
+
        elif [ -z "$flag" ] && [ -n "$username" ] && [ -n "$password" ]; then
           add_virtual_user $username $password
-          db_load -T -t hash -f /home/virtual_users.txt /etc/vsftpd/virtual_users.db
+          db_load -T -t hash -f ${userlist_path}${userlist_file} /etc/vsftpd/virtual_users.db
           install -g ftp -o ftp -d /ftp/virtual/$username
        else
           echo "empty"
           exit 1
        fi
+	   
 else
   echo "input args"
 fi

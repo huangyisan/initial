@@ -42,6 +42,7 @@ cat << EOF >> ${userlist_path}${userlist_file}
 $username
 $password
 EOF
+echo "add $username success"
 }
 
 create_virtual_user() {
@@ -77,7 +78,7 @@ start_vsftpd
 
 
 echo_string() {
-echo "echo func $OPTARG"
+echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
 }
 
 if [ x$1 != x ]
@@ -96,11 +97,13 @@ then
             password="$OPTARG"
             ;;
         \?|h)
-            echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
+            echo_string
             exit 1
       esac
     done
-        if [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
+        if [ -z "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
+            echo_string 
+        elif [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
             install_vsftpd
 
         elif [ -z "$flag" ] && [ -n "$username" ] && [ -n "$password" ]; then
@@ -108,10 +111,10 @@ then
             db_load -T -t hash -f ${userlist_path}${userlist_file} /etc/vsftpd/virtual_users.db
             install -g ftp -o ftp -d /ftp/virtual/$username
         else
-            echo "username or password is empty"
+            echo_string
             exit 1
         fi
 	   
 else
-    echo -e "Usage:  ./vsftpd_manager [-I] \n\t./vsftpd_manager [-u] username [-p] password \n\nInput options:\n\t -I install vsftpd \n\t -u Set username \n\t -p Set password"
+    echo_string
 fi

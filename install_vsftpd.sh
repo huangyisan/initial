@@ -62,3 +62,6 @@ start_vsftpd() {
 service vsftpd start
 }
 
+install_vsftpd() {
+
+}

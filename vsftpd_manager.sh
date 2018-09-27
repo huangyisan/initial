@@ -41,14 +41,15 @@ add_virtual_user() {
 
 exist=`awk 'NR%2==1' /home/virtual_users.txt  | egrep "\<$username\>" | wc -l`
 
-if [ $exist !=0 ]; then
-    echo "the user $username is exists"
+if [ "$exist" != 0 ]; then
+    echo "The user $username is exists"
 else
 cat << EOF >> ${userlist_path}${userlist_file}
 $username
 $password
 EOF
-echo "add $username success"
+echo "Add user $username success"
+fi
 }
 
 create_virtual_user() {

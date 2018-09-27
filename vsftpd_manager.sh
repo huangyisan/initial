@@ -39,7 +39,7 @@ EOF
 # create virtual user db file and record virtual username password
 add_virtual_user() {
 
-exist=`awk 'NR%2==1' $userlist_path$userlist_file  | egrep "\<$username\>" | wc -l`
+exist=`awk 'NR%2==1' ${userlist_path}${userlist_file}  | egrep "\<$username\>" | wc -l`
 
 if [ "$exist" != 0 ]; then
     echo "The user $username is exists"

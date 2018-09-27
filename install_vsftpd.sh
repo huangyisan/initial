@@ -79,9 +79,11 @@ then
     do
       case $arg in  
         i)  
-          install_vsftpd;;
+          # install_vsftpd;;
+          echo "i" ;;
         a)  
-          create_new_user $OPTARG;;
+          #create_new_user $OPTARG;;
+          echo "$OPTARG" ;;
         \?) 
           echo "inviled args"
       esac

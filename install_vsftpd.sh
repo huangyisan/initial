@@ -1,6 +1,11 @@
 #/bin/bash
 
 # base db4, virtual user
+set -x 
+
+export userlist_path="/home/"
+
+
 
 # install db4 vsftpd
 install_db4_vsftpd() {
@@ -33,6 +38,13 @@ EOF
 }
 
 # create virtual user db file and record virtual username password
+add_virtual_user() {
+cat << EOF >> /home/virtual_users.txt
+$username
+$password
+EOF
+}
+
 create_virtual_user() {
 touch /home/virtual_users.txt
 chmod 600 /home/virtual_users.txt
@@ -68,26 +80,44 @@ create_virtual_user
 start_vsftpd
 }
 
-create_new_user() {
-create_virtual_user
-}
+#create_new_user() {
+#create_virtual_user
+#}
 
+echo_string() {
+echo "echo func $OPTARG"
+}
 
 if [ x$1 != x ]
 then
-    while getopts "a:i" arg
+    while getopts "ip:u:" arg
     do
       case $arg in  
         i)  
-          # install_vsftpd;;
+          # install vsftpd;;
+          flag=ture
           echo "i" ;;
-        a)  
-          #create_new_user $OPTARG;;
-          echo "$OPTARG" ;;
+        u)  
+          username="$OPTARG"
+          ;;
+        p)  
+          password="$OPTARG"
+          ;;
         \?) 
           echo "inviled args"
       esac
     done
+       if [ -n "$flag" ] && [ -z "$username" ] && [ -z "$password" ]; then
+          install_vsftpd
+   
+       elif [ -z "$flag" ] && [ -n "$username" ] && [ -n "$password" ]; then
+          add_virtual_user $username $password
+          db_load -T -t hash -f /home/virtual_users.txt /etc/vsftpd/virtual_users.db
+          install -g ftp -o ftp -d /ftp/virtual/$username
+       else
+          echo "empty"
+          exit 1
+       fi
 else
   echo "input args"
 fi

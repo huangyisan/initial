@@ -71,3 +71,21 @@ start_vsftpd
 create_new_user() {
 create_virtual_user
 }
+
+
+if [ x$1 != x ]
+then
+    while getopts "a:i" arg
+    do
+      case $arg in  
+        i)  
+          install_vsftpd;;
+        a)  
+          create_new_user $OPTARG;;
+        \?) 
+          echo "inviled args"
+      esac
+    done
+else
+  echo "input args"
+fi

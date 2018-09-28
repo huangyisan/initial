@@ -33,6 +33,7 @@ local_root=${virtual_user_path}\$USER
 userlist_enable=YES
 tcp_wrappers=YES
 hide_ids=YES
+allow_writeable_chroot=YES
 EOF
 }
 
